@@ -23,6 +23,7 @@ class TempImagesController extends Controller
             return response()->json([
                 'status' => true,
                 'image_id' => $tempImage->id,
+                'ImagePath' => asset('/temp/' . $newName),
                 'message' => 'Image uploaded successfully'
             ]);
         }
