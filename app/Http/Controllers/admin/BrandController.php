@@ -40,14 +40,15 @@ class BrandController extends Controller
             $brand->slug = $request->slug;
             $brand->status = $request->status;
             $brand->save();
+            Session::flash('success', 'Brand added successfully');
             return response()->json([
                 'status' => true,
-                'message' => 'Brand created successfully',
+                'message' => 'Brand added successfully.'
             ]);
         } else {
             return response()->json([
                 'status' => false,
-                'errors' => $validator->errors(),
+                'errors' => $validator->errors()
             ]);
         }
     }
@@ -78,14 +79,14 @@ class BrandController extends Controller
             'slug' => 'required|unique:brands,slug,' . $brand->id . ',id',
         ]);
         if ($validator->passes()) {
-            $brand = new Brand();
             $brand->name = $request->name;
             $brand->slug = $request->slug;
             $brand->status = $request->status;
             $brand->save();
+            Session::flash('success', 'Brand updated successfully.');
             return response()->json([
                 'status' => true,
-                'message' => 'Brand created successfully',
+                'message' => 'Brand updated successfully',
             ]);
         } else {
             return response()->json([
@@ -93,5 +94,24 @@ class BrandController extends Controller
                 'errors' => $validator->errors(),
             ]);
         }
+    }
+
+    public function destroy($id, Request $request)
+    {
+        $brand = Brand::find($id);
+        if (empty($brand)) {
+            Session::flash('error', 'Brand not found.');
+            return response()->json([
+                'status' => false,
+                'message' => 'Brand not found.'
+            ]);
+        }
+
+        $brand->delete();
+        Session::flash('success', 'Brand deleted successfully.');
+        return response()->json([
+            'status' => true,
+            'message' => 'Brand deleted successfully.'
+        ]);
     }
 }
